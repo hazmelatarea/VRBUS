@@ -12,7 +12,7 @@ class VRBUS_API USpeedModifierComponent : public UActorComponent
 public:
 	USpeedModifierComponent();
 
-	// 1 = normal speed. Whoever moves (Player, bus) should multiply their speed by this.
+	// 1 = normal speed
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Speed")
 	float SpeedMultiplier = 1.f;
 };

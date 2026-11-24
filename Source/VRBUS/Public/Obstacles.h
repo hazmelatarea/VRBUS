@@ -7,8 +7,8 @@
 
 class UBoxComponent;
 
-// Aviso para el Game Manager (solo C++): alguien tocó un obstáculo mortal
-DECLARE_MULTICAST_DELEGATE_OneParam(FOnDayRestartRequested, AActor* /*Culpable*/);
+//Mortal Obstacle touch
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnDayRestartRequested, AActor*);
 
 UCLASS()
 class VRBUS_API AObstacles : public AActor
@@ -18,27 +18,32 @@ class VRBUS_API AObstacles : public AActor
 public:
 	AObstacles();
 
-	// Obstacle.Slow = ralentiza, Obstacle.Deadly = reinicia el día
+	// Obstacle.Slow, Obstacle.Deadly
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Obstacle")
 	FGameplayTag ObstacleType;
 
-	// Multiplicador de velocidad (0.5 = mitad). Solo se usa con Obstacle.Slow
+	//Spped reduction multiplier, 0.0= no movement, 1.0= no effect just for the slow type
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Obstacle", meta = (ClampMin = "0.0", ClampMax = "1.0"))
 	float VelocityReduction = 0.5f;
 
-	// El Game Manager se enlaza a esto: AObstacle::OnDayRestartRequested.AddUObject(...)
+	//Restart the day when the player dies
 	static FOnDayRestartRequested OnDayRestartRequested;
 
+	//Apply the effect of the obstacle to the player 
 	UFUNCTION(BlueprintCallable, Category = "Obstacles")
 	void ApplyEffect(AActor* Other);
 
+	//Slow down
 	UFUNCTION(BlueprintCallable, Category = "Obstacles")
 	void SlowDownBus(AActor* Other);
 
+	//Mortal Effect
 	UFUNCTION(BlueprintCallable, Category = "Obstacles")
 	void KillPlayer(AActor* Other);
 
 protected:
+
+	//Collision component to detect overlaps
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Obstacles")
 	UBoxComponent* Trigger;
 
@@ -46,6 +51,7 @@ protected:
 	void OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
 		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
+	//Collision end overlap
 	UFUNCTION()
 	void OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
 		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
