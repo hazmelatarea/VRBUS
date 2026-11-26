@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Bus.h"
+#include "Bus/Bus.h"
 
 // Sets default values
 ABus::ABus()
